@@ -1,0 +1,51 @@
+---
+import { profile } from '../data/profile';
+import type { Publication, PublicationResource } from '../data/publications';
+
+interface Props {
+  publication: Publication;
+  titleTag?: 'h4' | 'h5';
+}
+
+const { publication, titleTag: Title = 'h4' } = Astro.props;
+const { title, language, authors, authorListComplete, category, year, venue, notes, links } = publication;
+const highlightedNames = [profile.name, ...profile.publicationNameAliases];
+const resourceLabels: readonly PublicationResource[] = ['Paper', 'arXiv', 'Code', 'Slides', 'Poster'];
+const resources = resourceLabels.flatMap((label) => {
+  const href = links[label];
+  return href ? [{ label, href }] : [];
+});
+const citation = venue || [category === 'preprint' && 'Preprint', year].filter(Boolean).join(' ');
+---
+
+<li class="publication-item">
+  <article>
+    <Title class="publication-title" lang={language}>{title}</Title>
+    <div class="publication-byline">
+      {authors.length > 0 && (
+        <p class="publication-authors" lang={language}>
+          {authors.map((author, index) => (
+            <>{index > 0 && ', '}<span class:list={['publication-author', { 'publication-author-highlight': highlightedNames.includes(author) }]}>{author}</span></>
+          ))}
+          {!authorListComplete && <span class="author-note" lang="en"> (full author list pending)</span>}
+        </p>
+      )}
+      {(citation || notes || resources.length > 0) && (
+        <div class="publication-reference">
+          {(citation || notes) && (
+            <p class="publication-meta">
+              {citation && <em lang={venue ? language : undefined}>{citation}</em>}
+              {citation && notes && <span aria-hidden="true"> · </span>}
+              {notes}
+            </p>
+          )}
+          {resources.length > 0 && (
+            <ul class="inline-list resource-links publication-links" aria-label={`Resources for ${title}`} role="list">
+              {resources.map(({ label, href }) => <li><a href={href}>{label}</a></li>)}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  </article>
+</li>

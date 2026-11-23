@@ -1,0 +1,17 @@
+---
+import { profile } from '../data/profile';
+---
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="site-name" href="#home">{profile.name}</a>
+    <nav aria-label="Primary">
+      <ul class="inline-list primary-links" role="list">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#publications">Publications</a></li>
+        {profile.cvPath && <li><a href={profile.cvPath}>CV</a></li>}
+      </ul>
+    </nav>
+  </div>
+</header>

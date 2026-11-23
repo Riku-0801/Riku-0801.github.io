@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import News from '../components/News.astro';
+import Profile from '../components/Profile.astro';
+import PublicationItem from '../components/PublicationItem.astro';
+import { awards } from '../data/awards';
+import { education } from '../data/education';
+import { experience } from '../data/experience';
+import { showNews } from '../data/news';
+import { profile } from '../data/profile';
+import { publications } from '../data/publications';
+
+const visiblePublications = publications
+  .filter(({ visible }) => visible)
+  .sort((first, second) => (second.year ?? 0) - (first.year ?? 0));
+
+const publicationsByCategory = Map.groupBy(visiblePublications, ({ category }) => category);
+const publicationGroups = [
+  {
+    category: 'international-conference-refereed',
+    heading: 'International Conference (Refereed)',
+    id: 'peer-reviewed-publications',
+  },
+  { category: 'preprint', heading: 'Preprint', id: 'preprint-publications' },
+  { category: 'domestic-conference', heading: 'Domestic Conference', id: 'domestic-conference-publications' },
+] as const;
+---
+
+<BaseLayout title={`${profile.name} | Nagoya University`} description={profile.description}>
+  <Header />
+  <main class="container" id="main-content" tabindex="-1">
+    <Profile />
+
+    <section class="content-section" id="research" aria-labelledby="research-heading">
+      <h2 id="research-heading">Research Interests</h2>
+      <p>{profile.researchInterests}</p>
+    </section>
+
+    {showNews && <News />}
+
+    <section class="content-section" id="publications" aria-labelledby="publications-heading">
+      <h2 id="publications-heading">Publications</h2>
+      {publicationGroups.map(({ category, heading, id }) => {
+        const entries = publicationsByCategory.get(category) ?? [];
+        const entriesByYear = category === 'domestic-conference'
+          ? Map.groupBy(entries, ({ year }) => year)
+          : null;
+
+        return (
+          <section class="publication-group" aria-labelledby={id}>
+            <h3 id={id}>{heading}</h3>
+            {entries.length === 0 && <p class="secondary empty-note">No entries yet.</p>}
+            {entriesByYear && Array.from(entriesByYear, ([year, yearEntries]) => (
+              <div class="publication-year">
+                <h4 class="publication-year-heading">{year ?? 'Undated'}</h4>
+                <ul class="publication-list" role="list">
+                  {yearEntries.map((publication) => <PublicationItem publication={publication} titleTag="h5" />)}
+                </ul>
+              </div>
+            ))}
+            {!entriesByYear && entries.length > 0 && (
+              <ul class="publication-list" role="list">
+                {entries.map((publication) => <PublicationItem publication={publication} />)}
+              </ul>
+            )}
+          </section>
+        );
+      })}
+    </section>
+
+    <section class="content-section" id="education" aria-labelledby="education-heading">
+      <h2 id="education-heading">Education</h2>
+      <ul class="detail-list" role="list">
+        {education.map(({ degree, department, school, university, dates, laboratory }) => (
+          <li>
+            <div class="dated-entry-header">
+              <h3>{degree}</h3>
+              <p class="secondary entry-dates">{dates}</p>
+            </div>
+            <p>{department}, {school}</p>
+            <p>{university}</p>
+            {laboratory && <p class="secondary">{laboratory}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="content-section" id="experience" aria-labelledby="experience-heading">
+      <h2 id="experience-heading">Experience</h2>
+      {experience.length ? (
+        <ul class="detail-list" role="list">
+          {experience.map(({ organization, role, dates, description }) => (
+            <li>
+              <div class="dated-entry-header">
+                <h3>{organization}</h3>
+                <p class="secondary entry-dates">{dates}</p>
+              </div>
+              <p>{role}</p>
+              {description && <p>{description}</p>}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="secondary empty-note">No experience listed yet.</p>
+      )}
+    </section>
+
+    <section class="content-section" id="awards" aria-labelledby="awards-heading">
+      <h2 id="awards-heading">Awards</h2>
+      <ul class="detail-list awards-list" role="list">
+        {awards.map(({ event, prizes }) => (
+          <li><strong>{event}</strong> <span class="award-separator" aria-hidden="true">—</span> {prizes.join(', ')}</li>
+        ))}
+      </ul>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

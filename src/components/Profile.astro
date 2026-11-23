@@ -1,0 +1,35 @@
+---
+import { profile } from '../data/profile';
+
+const photo = profile.photo ?? { src: '/images/profile-placeholder.svg', alt: '' };
+const crop = profile.photo?.crop;
+const emailLink = profile.email?.includes('@') ? `mailto:${profile.email}` : null;
+const links = [
+  { label: 'GitHub', href: profile.githubUrl },
+  { label: 'X', href: profile.xUrl },
+  { label: 'LinkedIn', href: profile.linkedinUrl },
+  { label: 'Google Scholar', href: profile.scholarUrl },
+  { label: 'Semantic Scholar', href: profile.semanticScholarUrl },
+  { label: 'CV', href: profile.cvPath },
+];
+---
+
+<section class="profile" aria-labelledby="profile-heading">
+  <div class="profile-photo">
+    <img src={photo.src} alt={photo.alt} style={crop} />
+  </div>
+  <div>
+    <h1 id="profile-heading">{profile.name}</h1>
+    <p class="affiliation">{profile.affiliation}</p>
+    <p class="profile-details">{profile.laboratory} <span aria-hidden="true">·</span> {profile.researchArea}</p>
+    <p class="biography">{profile.biography}</p>
+    {profile.email && (
+      <p class="profile-contact">
+        <span class="secondary">Email</span> {emailLink ? <a href={emailLink}>{profile.email}</a> : profile.email}
+      </p>
+    )}
+    <ul class="inline-list resource-links" aria-label="Profile links" role="list">
+      {links.map(({ label, href }) => href && <li><a href={href}>{label}</a></li>)}
+    </ul>
+  </div>
+</section>

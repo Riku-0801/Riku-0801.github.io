@@ -1,0 +1,16 @@
+---
+import { profile } from '../data/profile';
+
+const year = new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: 'Asia/Tokyo' }).format(new Date());
+const lastUpdated = profile.lastUpdated && new Intl.DateTimeFormat('en', {
+  dateStyle: 'medium',
+  timeZone: 'UTC',
+}).format(new Date(`${profile.lastUpdated}T00:00:00Z`));
+---
+
+<footer class="container">
+  <div class="footer-inner">
+    <p>© {year} {profile.name}</p>
+    {lastUpdated && <p>Last updated <time datetime={profile.lastUpdated}>{lastUpdated}</time></p>}
+  </div>
+</footer>

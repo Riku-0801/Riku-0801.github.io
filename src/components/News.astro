@@ -1,0 +1,24 @@
+---
+import { news, visibleNewsLimit } from '../data/news';
+
+const monthFormatter = new Intl.DateTimeFormat('en', {
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+const entries = [...news]
+  .sort((first, second) => second.date.localeCompare(first.date))
+  .slice(0, visibleNewsLimit);
+---
+
+<section class="content-section" id="news" aria-labelledby="news-heading">
+  <h2 id="news-heading">News</h2>
+  <ul class="news-list" role="list">
+    {entries.map(({ date, text }) => (
+      <li>
+        <time datetime={date}>{monthFormatter.format(new Date(`${date}-01T00:00:00Z`))}</time>
+        <span>{text}</span>
+      </li>
+    ))}
+  </ul>
+</section>
