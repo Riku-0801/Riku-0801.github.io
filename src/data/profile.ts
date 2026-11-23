@@ -37,7 +37,7 @@ export const profile: AcademicProfile = {
   researchInterests:
     'I use mechanistic interpretability and circuit analysis to investigate whether large language models rely on shared or distinct mechanisms for linguistic and arithmetic processing.',
   description:
-    'Riku Kisako is a graduate student at Nagoya University researching natural language processing, mechanistic interpretability, and circuits in large language models.',
+    'Riku Kisako is a graduate student at Nagoya University researching natural language processing.',
   photo: {
     src: '/images/profile.jpg?v=e504c59c',
     alt: 'Riku Kisako beside his conference poster',
