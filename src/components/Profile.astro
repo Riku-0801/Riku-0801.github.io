@@ -21,7 +21,7 @@ const links = [
   <div>
     <h1 id="profile-heading">{profile.name}</h1>
     <p class="affiliation">{profile.affiliation}</p>
-    <p class="profile-details">{profile.laboratory} <span aria-hidden="true">·</span> {profile.researchArea}</p>
+    <p class="profile-details"><a href={profile.laboratoryUrl}>{profile.laboratory}</a> <span aria-hidden="true">·</span> {profile.researchArea}</p>
     <p class="biography">{profile.biography}</p>
     {profile.email && (
       <p class="profile-contact">

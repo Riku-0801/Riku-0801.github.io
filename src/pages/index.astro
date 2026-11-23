@@ -33,11 +33,6 @@ const publicationGroups = [
   <main class="container" id="main-content" tabindex="-1">
     <Profile />
 
-    <section class="content-section" id="research" aria-labelledby="research-heading">
-      <h2 id="research-heading">Research Interests</h2>
-      <p>{profile.researchInterests}</p>
-    </section>
-
     {showNews && <News />}
 
     <section class="content-section" id="publications" aria-labelledby="publications-heading">
@@ -74,14 +69,20 @@ const publicationGroups = [
       <h2 id="education-heading">Education</h2>
       <ul class="detail-list" role="list">
         {education.map(({ degree, department, school, university, dates, laboratory }) => (
-          <li>
+          <li class="dated-entry">
             <div class="dated-entry-header">
               <h3>{degree}</h3>
               <p class="secondary entry-dates">{dates}</p>
             </div>
-            <p>{department}, {school}</p>
-            <p>{university}</p>
-            {laboratory && <p class="secondary">{laboratory}</p>}
+            <div class="dated-entry-details">
+              <p>{department}, {school}</p>
+              <p>{university}</p>
+              {laboratory && (
+                <p class="secondary">
+                  {laboratory === profile.laboratory ? <a href={profile.laboratoryUrl}>{laboratory}</a> : laboratory}
+                </p>
+              )}
+            </div>
           </li>
         ))}
       </ul>
@@ -92,13 +93,15 @@ const publicationGroups = [
       {experience.length ? (
         <ul class="detail-list" role="list">
           {experience.map(({ organization, role, dates, description }) => (
-            <li>
+            <li class="dated-entry">
               <div class="dated-entry-header">
                 <h3>{organization}</h3>
                 <p class="secondary entry-dates">{dates}</p>
               </div>
-              <p>{role}</p>
-              {description && <p>{description}</p>}
+              <div class="dated-entry-details">
+                <p>{role}</p>
+                {description && <p>{description}</p>}
+              </div>
             </li>
           ))}
         </ul>

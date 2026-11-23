@@ -9,6 +9,7 @@ interface AcademicProfile {
   publicationNameAliases: readonly string[];
   affiliation: string;
   laboratory: string;
+  laboratoryUrl: string;
   researchArea: string;
   biography: string;
   researchInterests: string;
@@ -29,6 +30,7 @@ export const profile: AcademicProfile = {
   publicationNameAliases: ['木迫 璃玖'],
   affiliation: 'Graduate School of Informatics, Nagoya University, Japan',
   laboratory: 'Sasano Laboratory',
+  laboratoryUrl: 'http://cr.fvcrc.i.nagoya-u.ac.jp/',
   researchArea: 'Natural Language Processing / Large Language Models',
   biography:
     'I am a graduate student studying the internal mechanisms of large language models.',
