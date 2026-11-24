@@ -253,6 +253,17 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
+.content-section {
+  --section-indent: clamp(0.375rem, 2vw, 1rem);
+}
+
+.publication-group,
+.publication-year,
+.publication-group > .empty-note,
+.content-section > :is(.detail-list, .news-list, .empty-note) {
+  margin-inline-start: var(--section-indent);
+}
+
 .publication-group + .publication-group {
   margin-top: 1.625rem;
 }
@@ -343,10 +354,6 @@ main {
 
 .awards-list {
   gap: 0.3rem;
-}
-
-.award-separator {
-  color: var(--secondary);
 }
 
 .footer-inner {

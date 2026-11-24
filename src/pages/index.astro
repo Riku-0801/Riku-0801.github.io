@@ -39,15 +39,13 @@ const publicationGroups = [
       <h2 id="publications-heading">Publications</h2>
       {publicationGroups.map(({ category, heading, id }) => {
         const entries = publicationsByCategory.get(category) ?? [];
-        const entriesByYear = category === 'domestic-conference'
-          ? Map.groupBy(entries, ({ year }) => year)
-          : null;
+        const entriesByYear = Map.groupBy(entries, ({ year }) => year);
 
         return (
           <section class="publication-group" aria-labelledby={id}>
             <h3 id={id}>{heading}</h3>
             {entries.length === 0 && <p class="secondary empty-note">No entries yet.</p>}
-            {entriesByYear && Array.from(entriesByYear, ([year, yearEntries]) => (
+            {Array.from(entriesByYear, ([year, yearEntries]) => (
               <div class="publication-year">
                 <h4 class="publication-year-heading">{year ?? 'Undated'}</h4>
                 <ul class="publication-list" role="list">
@@ -55,11 +53,6 @@ const publicationGroups = [
                 </ul>
               </div>
             ))}
-            {!entriesByYear && entries.length > 0 && (
-              <ul class="publication-list" role="list">
-                {entries.map((publication) => <PublicationItem publication={publication} />)}
-              </ul>
-            )}
           </section>
         );
       })}
@@ -114,7 +107,10 @@ const publicationGroups = [
       <h2 id="awards-heading">Awards</h2>
       <ul class="detail-list awards-list" role="list">
         {awards.map(({ event, prizes }) => (
-          <li><strong>{event}</strong> <span class="award-separator" aria-hidden="true">—</span> {prizes.join(', ')}</li>
+          <li>
+            <strong>{event}</strong>
+            <p class="award-prizes">{prizes.join(', ')}</p>
+          </li>
         ))}
       </ul>
     </section>
